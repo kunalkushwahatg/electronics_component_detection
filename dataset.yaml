@@ -1,0 +1,15 @@
+train: ./datasets/train/images
+val: ./datasets/val/images
+
+nc: 37  # Number of classes
+names: [
+  'shunt', 'induction-coil', 'limiter-clipper', 'transistor', 'pulse-generator',
+  'rheostat', 'armature', 'Integrated-micro-circuit', 'potential-divider',
+  'step-up-transformer', 'PNP-transistor', 'potentiometer', 'multiplexer',
+  'junction-transistor', 'cartridge-fuse', 'clip-lead', 'electric-relay',
+  'filament', 'Bypass-capacitor', 'light-circuit', 'local-oscillator',
+  'Electrolytic-capacitor', 'microprocessor', 'memory-chip', 'relay',
+  'semiconductor-diode', 'jumper-cable', 'step-down-transformer', 'LED',
+  'solenoid', 'heat-sink', 'attenuator', 'stabilizer', 'omni-directional-antenna',
+  'microchip', 'images', 'semi-conductor'
+]
