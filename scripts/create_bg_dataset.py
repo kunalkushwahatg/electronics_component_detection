@@ -22,4 +22,4 @@ for video in tqdm.tqdm(os.listdir(video_path)):
 total_images = len(os.listdir(output_path))
 print(f"Extracted {total_images} images from {len(os.listdir(video_path))} videos to {output_path}")
 
-#python create_bg_dataset.py                    
+#python create_bg_dataset.py --video-path ./videos --output-path ./background --fps 5
