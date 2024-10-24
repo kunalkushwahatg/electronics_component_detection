@@ -20,10 +20,4 @@ names: [{class_names_str}]
     with open(yaml_path, 'w') as yaml_file:
         yaml_file.write(yaml_content)
 
-# Example usage
-component_paths = './archive/images'  # Path to component images
-base_path = './datasets'  # Base output path
-
-# Extract folder names as class names
-class_names = os.listdir(component_paths)
 
