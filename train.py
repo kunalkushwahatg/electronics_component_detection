@@ -20,7 +20,7 @@ def train_model(data, epochs, batch_size, img_size, weights, project, name):
     
     # Train the model
     model.train(
-        data='/home/kunalkushwahatg/desktop/yolo_cyborg/dataset.yaml',         # Path to the dataset YAML file
+        data=data,         # Path to the dataset YAML file
         epochs=epochs,     # Number of epochs
         batch=batch_size,  # Batch size
         imgsz=img_size,    # Image size

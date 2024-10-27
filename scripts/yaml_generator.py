@@ -21,3 +21,4 @@ names: [{class_names_str}]
         yaml_file.write(yaml_content)
 
 
+

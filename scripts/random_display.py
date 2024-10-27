@@ -2,6 +2,7 @@ import os
 import random
 import cv2
 import matplotlib.pyplot as plt
+import argparse
 
 def create_bbox_image(image_path, label_path, class_names):
     # Load the image
@@ -64,7 +65,13 @@ def randomly_select_and_display_image(base_path, class_names):
     print(f"Displayed image: {image_path} from the {dataset_choice} dataset")
 
 # Example usage
-components_folder = './archive/images'  # Path to component images
+  # Path to component images
+
+#setup argument parser
+parser = argparse.ArgumentParser(description="Randomly select and display an image")
+parser.add_argument('--components-folder', type=str, required=True, help="Path to the components folder")
+
+components_folder = parser.parse_args().components_folder
 base_path = './datasets'  # Base path to the dataset (train/val folders)
 
 # Extract folder names as class names
@@ -73,3 +80,5 @@ class_names = {i: class_name for i, class_name in enumerate(class_names)}
 
 # Call the function to randomly select and display an image
 randomly_select_and_display_image(base_path, class_names)
+
+

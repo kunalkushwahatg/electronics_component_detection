@@ -4,18 +4,23 @@ from yaml_generator import generate_yaml_file
 from val_dataset import move_files_to_val
 from pathlib import Path
 import os
+import argparse
+
+# Set up argument parser
+parser = argparse.ArgumentParser(description="Create a custom YOLO dataset")
+parser.add_argument('--components-folder', type=str, required=True, help="Path to the components folder")
 
 
 
 # Define the paths
-components_folder = './archive/images/'
-bg_folder = 'background'
+components_folder = parser.parse_args().components_folder
+bg_folder = './background'
 output_path = './datasets/train'
 yaml_path = './'
 base_path = './datasets'
 
 # #setup the yolo folder structure
-setup_yolo_folder_structure(output_path)
+setup_yolo_folder_structure(base_path)
 
 
 # Get the list of component image paths
@@ -43,3 +48,5 @@ generate_yaml_file(yaml_path, len(class_names), class_names)
 
 
 
+
+#python create_dataset.py --components-folder ./components
