@@ -7,7 +7,7 @@ def perform_inference(model_path, image_path, output_path='./output', show_plot=
     # Load the YOLOv8 model
     model = YOLO(model_path)
 
-    #create a directory to save the output image
+    # Create a directory to save the output image
     os.makedirs(output_path, exist_ok=True)
 
     # Perform inference on the image
@@ -27,9 +27,9 @@ def perform_inference(model_path, image_path, output_path='./output', show_plot=
     # Ensure the output directory exists
     os.makedirs(output_path, exist_ok=True)
 
-    # Save the image with bounding boxes and labels
+    # Save the image with bounding boxes and labels using plt.savefig
     output_image_path = os.path.join(output_path, os.path.basename(image_path))
-    results_img.save(output_image_path)  # Save the plotted image
+    plt.imsave(output_image_path, results_img)  # Save the plotted image
 
     print(f"Output image saved to {output_image_path}")
 
@@ -51,4 +51,5 @@ def main():
 if __name__ == "__main__":
     main()
 
-#python inference.py --model-path runs/train/exp4/weights/best.pt --image-path ./datasets/val/images/augmented_13.jpg --output-path ./output --show-plot
+
+#python inference.py --model-path ./runs/train/exp/weights/best.pt --image-path ./datasets/val/images/0.jpg --output-path ./output --show-plot
