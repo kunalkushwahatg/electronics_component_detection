@@ -9,15 +9,21 @@ import argparse
 # Set up argument parser
 parser = argparse.ArgumentParser(description="Create a custom YOLO dataset")
 parser.add_argument('--components-folder', type=str, required=True, help="Path to the components folder")
-
+parser.add_argument('--num-images', type=int, default=1000, help="Number of images to generate")
+parser.add_argument('--image-size', type=int, default=224, help="Size of the generated images")
 
 
 # Define the paths
 components_folder = parser.parse_args().components_folder
+num_images = parser.parse_args().num_images
+image_size = parser.parse_args().image_size
+
 bg_folder = './background'
 output_path = './datasets/train'
 yaml_path = './'
 base_path = './datasets'
+
+
 
 # #setup the yolo folder structure
 setup_yolo_folder_structure(base_path)
@@ -34,10 +40,10 @@ class_names = {class_name: i for i, class_name in enumerate(class_names)}
 bg_paths = AugmentationGenerator.get_background_image_paths(bg_folder)
 
 # Create an instance of the AugmentationGenerator class
-generator = AugmentationGenerator(component_paths, bg_paths, output_path, class_names)
+generator = AugmentationGenerator(component_paths, bg_paths, output_path, class_names, (image_size, image_size))
 
 # Generate the augmented images and annotations
-generator.create_augmented_images_with_annotations(num_images=1000)
+generator.create_augmented_images_with_annotations(num_images=num_images)
 
 
 #move the images and labels to the val folder
@@ -49,4 +55,4 @@ generate_yaml_file(yaml_path, len(class_names), class_names)
 
 
 
-#python create_dataset.py --components-folder ./components
+#python create_dataset.py --components-folder ./components --num-images 1000 --image-size 224
