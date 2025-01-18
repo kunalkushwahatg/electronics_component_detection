@@ -1,17 +1,35 @@
+from PIL import Image, ImageEnhance, ImageOps  # Added ImageOps for black-to-transparency conversion
 import os
 import random
-from PIL import Image, ImageEnhance
 from pathlib import Path
 from tqdm import tqdm
-from matplotlib import pyplot as plt
 
 class AugmentationGenerator:
     def __init__(self, component_paths, bg_paths, output_path, class_names, img_size=(640, 640)):
         self.component_paths = component_paths
         self.bg_paths = bg_paths
-        self.output_path = output_path
+        self.output_path = output_path  
         self.class_names = class_names
         self.img_size = img_size
+
+    def make_black_bg_transparent(self, component_img):
+        """
+        Replace black background in component image with transparency.
+        """
+        # Convert to RGBA for transparency handling
+        component_img = component_img.convert("RGBA")
+        data = component_img.getdata()
+
+        new_data = []
+        for item in data:
+            # Replace black (or near-black) pixels with transparency
+            if item[0] < 1 and item[1] < 1 and item[2] < 1:  # Adjust threshold for "blackness"
+                new_data.append((0, 0, 0, 0))  # Transparent pixel
+            else:
+                new_data.append(item)
+
+        component_img.putdata(new_data)
+        return component_img
 
     def random_resize_and_position(self, component, bg_w, bg_h):
         # Set the size range for components
@@ -72,7 +90,10 @@ class AugmentationGenerator:
                 # Select a random component image
                 component_img_path = random.choice(self.component_paths)
                 compo_class = str(component_img_path).split('/')[-2]
-                component_img = Image.open(component_img_path).convert('RGBA')
+                component_img = Image.open(component_img_path)
+
+                # Replace black background with transparency
+                component_img = self.make_black_bg_transparent(component_img)
 
                 # Resize and place component on background
                 component_img, x_min, y_min, comp_w, comp_h = self.random_resize_and_position(component_img, bg_w, bg_h)
@@ -96,14 +117,6 @@ class AugmentationGenerator:
             img_output_path = os.path.join(self.output_path, 'images', f'augmented_{i}.jpg')
             bg_img_copy.save(img_output_path)
 
-            # print(f"Saved image: {img_output_path}")
-
-            # #load the saved image and display it
-            # img = Image.open(img_output_path)   
-            # plt.imshow(img)
-            # plt.show()
-
-
             # Save the corresponding label file
             label_output_path = os.path.join(self.output_path, 'labels', f'augmented_{i}.txt')
             with open(label_output_path, 'w') as label_file:
@@ -116,31 +129,3 @@ class AugmentationGenerator:
         for ext in extensions:
             bg_paths.extend(list(Path(bg_folder).rglob(ext)))  # Use rglob to search recursively
         return bg_paths
-
-
-'''
-from pathlib import Path
-import os
-
-# Define the paths
-components_folder = './archive/images/'
-bg_folder = 'bg'
-output_path = './datasets/train'
-
-# Get the list of component image paths
-component_paths = list(Path(components_folder).glob('**/*.jpg'))
-
-# Get the list of class names and create a mapping
-class_names = os.listdir(components_folder)
-class_names = {class_name: i for i, class_name in enumerate(class_names)}
-
-# Create background image paths
-bg_paths = AugmentationGenerator.get_background_image_paths(bg_folder)
-
-# Create an instance of the AugmentationGenerator class
-generator = AugmentationGenerator(component_paths, bg_paths, output_path, class_names)
-
-# Generate the augmented images and annotations
-generator.create_augmented_images_with_annotations(num_images=1000)
-
-'''
